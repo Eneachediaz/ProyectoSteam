@@ -73,7 +73,7 @@ def userdata_function(df: pd.DataFrame, User_id: str):
 async def get_userdata(User_id: str):
     try:
         # Cambia la ruta del archivo según la ubicación de tu archivo df_endpoint_1.parquet
-        df = pd.read_parquet("/Users/nicolashernandez/Desktop/Programación/PI MLOps - STEAM/API/endpoint2")
+        df = pd.read_parquet("API/endpoint2")
 
         # Aplicar la función para obtener el top de gastadores por año
         result = userdata_function(df, User_id)
