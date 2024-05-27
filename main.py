@@ -181,8 +181,7 @@ async def get_developer_reviews_analysis(desarrolladora: str):
         raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
 
 def recommend_items(df:pd.DataFrame,user:str):
-    pivot_table = df.pivot_table(index='user_id', columns='item_name', values='sentiment').fillna(0)
-    item_similarity = cosine_similarity(pivot_table.T)
+    item_similarity = cosine_similarity(df.T)
     item_similarity_df = pd.DataFrame(item_similarity, index=pivot_table.columns, columns=pivot_table.columns)
     user_ratings = pivot_table.loc[user]
     similar_scores = item_similarity_df.dot(user_ratings).div(item_similarity_df.sum(axis=1))
