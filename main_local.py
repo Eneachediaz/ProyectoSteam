@@ -215,7 +215,7 @@ def recommend_items(df:pd.DataFrame,user:str):
 async def get_recommend_items(user: str):
     try:
         #Se lee el archivo correspondiente al endpoint y se guardan los datos en un DataFrame
-        df = pd.read_parquet('df_Modelo')
+        df = pd.read_parquet('API_Datasets/df_Modelo')
         #Se aplica la función
         result = recommend_items(df, user)
         return JSONResponse(content=result, media_type="application/json")
