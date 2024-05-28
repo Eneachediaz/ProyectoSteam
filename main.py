@@ -193,16 +193,12 @@ async def get_developer_reviews_analysis(desarrolladora: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
 
-def recommend_items(user_similarity_df:pd.DataFrame,pivot_table:pd.DataFrame,user:str):
+def recommend_items(user_similarity_df: pd.DataFrame, pivot_table: pd.DataFrame, user: str):
     '''
-     Ingresando el id de un usuario, devuelve una lista con 5 juegos recomendados para dicho usuario.
+    Ingresando el id de un usuario, devuelve una lista con 5 juegos recomendados para dicho usuario.
     '''
-    #Se utiliza pivot_table para crear una matriz que pueda ingresarse en el modelo de cosine_similarity
-    #Se extraen los ratings específicos al usuario
     user_ratings = pivot_table.loc[user]
-    #Se encuentran ratings parecidos en otros usuarios
     similar_scores = user_similarity_df.dot(user_ratings).div(user_similarity_df.sum(axis=1))
-    #Se seleccionan los 5 elementos a recomendar
     recommendations = similar_scores.sort_values(ascending=False).head(5)
     return recommendations.to_dict()
 
