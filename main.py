@@ -192,29 +192,3 @@ async def get_developer_reviews_analysis(desarrolladora: str):
         raise HTTPException(status_code=404, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
-
-def recommend_items(user_similarity_df: pd.DataFrame, pivot_table: pd.DataFrame, user: str):
-    '''
-    Ingresando el id de un usuario, devuelve una lista con 5 juegos recomendados para dicho usuario.
-    '''
-    user_ratings = pivot_table.loc[user]
-    similar_scores = user_similarity_df.dot(user_ratings).div(user_similarity_df.sum(axis=1))
-    recommendations = similar_scores.sort_values(ascending=False).head(5)
-    return recommendations.to_dict()
-
-@app.get('/recommend_items/{user}')
-async def get_recommend_items(user: str):
-    try:
-        #Se lee el archivo correspondiente al endpoint y se guardan los datos en un DataFrame
-        user_similarity_df = pd.read_parquet('API_Datasets/user_similarity.parquet')
-        pivot_table = pd.read_parquet('API_Datasets/pivot_table.parquet')
-        #Se aplica la función
-        result = recommend_items(user_similarity_df, pivot_table, user)
-        return JSONResponse(content=result, media_type="application/json")
-    #Se utiliza FileNotFoundError y Exception para el manejo de erroes
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta ;)")
-    except ValueError as ve:
-        raise HTTPException(status_code=404, detail=str(ve))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
