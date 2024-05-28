@@ -35,7 +35,7 @@ def developer_function(df: pd.DataFrame, desarrollador: str):
 async def get_developer(desarrollador: str):
     try:
         #Se lee el archivo correspondiente al endpoint y se guardan los datos en un DataFrame
-        df = pd.read_parquet("API/endpoint1")
+        df = pd.read_parquet("API_Datasets/endpoint1")
         #Se aplica la función
         result = developer_function(df, desarrollador)
         return JSONResponse(content=jsonable_encoder(result.to_dict(orient="index")), media_type="application/json")
@@ -78,7 +78,7 @@ def userdata_function(df: pd.DataFrame, User_id: str):
 async def get_userdata(User_id: str):
     try:
         # Cambia la ruta del archivo según la ubicación de tu archivo df_endpoint_1.parquet
-        df = pd.read_parquet("/Users/nicolashernandez/Desktop/Programación/PI MLOps - STEAM/API/endpoint2")
+        df = pd.read_parquet("API_Datasets/endpoint2")
 
         # Aplicar la función para obtener el top de gastadores por año
         result = userdata_function(df, User_id)
@@ -110,7 +110,7 @@ def User_For_Genre(df: pd.DataFrame, genero: str):
 async def get_User_For_Genre(genero: str):
     try:
         #Se lee el archivo correspondiente al endpoint y se guardan los datos en un DataFrame
-        df = pd.read_parquet("API/endpoint3")
+        df = pd.read_parquet("API_Datasets/endpoint3")
 
         #
         result = User_For_Genre(df, genero)
@@ -148,7 +148,7 @@ def best_developer_year(df: pd.DataFrame, release_year: float):
 async def get_best_developer_year(release_year: float):
     try:
         #Se lee el archivo correspondiente al endpoint y se guardan los datos en un DataFrame
-        df = pd.read_parquet("API/endpoint4")
+        df = pd.read_parquet("API_Datasets/endpoint4")
         #Se aplica la función
         result = best_developer_year(df, release_year)
         return JSONResponse(content=result, media_type="application/json")
@@ -181,7 +181,7 @@ def developer_reviews_analysis(df: pd.DataFrame, desarrolladora: str):
 async def get_developer_reviews_analysis(desarrolladora: str):
     try:
         #Se lee el archivo correspondiente al endpoint y se guardan los datos en un DataFrame
-        df = pd.read_parquet("API/endpoint5")
+        df = pd.read_parquet("API_Datasets/endpoint5")
         #Se aplica la función
         result = developer_reviews_analysis(df, desarrolladora)
         return JSONResponse(content=result, media_type="application/json")
@@ -192,24 +192,6 @@ async def get_developer_reviews_analysis(desarrolladora: str):
         raise HTTPException(status_code=404, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
-
-def recommend_items(df:pd.DataFrame,user:str):
-    '''
-     Ingresando el id de un usuario, devuelve una lista con 5 juegos recomendados para dicho usuario.
-    '''
-    #Se utiliza pivot_table para crear una matriz que pueda ingresarse en el modelo de cosine_similarity
-    pivot_table = df.pivot_table(index='user_id', columns='item_name', values='sentiment').fillna(0)
-    #Se aplica el modelo de cosine_similarity
-    user_similarity = cosine_similarity(pivot_table.T)
-    #Se convierte la tabla de similaridad entre los usuarios a un DataFrame 
-    user_similarity_df = pd.DataFrame(user_similarity, index=pivot_table.columns, columns=pivot_table.columns)
-    #Se extraen los ratings específicos al usuario
-    user_ratings = pivot_table.loc[user]
-    #Se encuentran ratings parecidos en otros usuarios
-    similar_scores = user_similarity_df.dot(user_ratings).div(user_similarity_df.sum(axis=1))
-    #Se seleccionan los 5 elementos a recomendar
-    recommendations = similar_scores.sort_values(ascending=False).head(5)
-    return recommendations.to_dict()
 
 def recommend_items(user_similarity_df:pd.DataFrame,pivot_table:pd.DataFrame,user:str):
     '''
@@ -228,8 +210,8 @@ def recommend_items(user_similarity_df:pd.DataFrame,pivot_table:pd.DataFrame,use
 async def get_recommend_items(user: str):
     try:
         #Se lee el archivo correspondiente al endpoint y se guardan los datos en un DataFrame
-        user_similarity_df = pd.read_parquet('user_similarity.parquet')
-        pivot_table = pd.read_parquet('pivot_table.parquet')
+        user_similarity_df = pd.read_parquet('API_Datasets/user_similarity.parquet')
+        pivot_table = pd.read_parquet('API_Datasets/pivot_table.parquet')
         #Se aplica la función
         result = recommend_items(user_similarity_df, pivot_table, user)
         return JSONResponse(content=result, media_type="application/json")
