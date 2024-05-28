@@ -10,6 +10,15 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 app = FastAPI()
 
+try:
+    pivot_table = pd.read_parquet('df_Modelo')
+    item_similarity = cosine_similarity(pivot_table.T)
+    item_similarity_df = pd.DataFrame(item_similarity, index=pivot_table.columns, columns=pivot_table.columns)
+except FileNotFoundError:
+    raise Exception("Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta ;)")
+except Exception as e:
+    raise Exception(f"Error al leer el archivo Parquet: {str(e)}")
+
 def developer_function(df: pd.DataFrame, desarrollador: str):
     df_filtrado = df[df['developer'] == desarrollador]
 
@@ -180,10 +189,12 @@ async def get_developer_reviews_analysis(desarrolladora: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
 
-def recommend_items(df:pd.DataFrame,user:str):
-    item_similarity = cosine_similarity(df.T)
-    item_similarity_df = pd.DataFrame(item_similarity, index=pivot_table.columns, columns=pivot_table.columns)
+def recommend_items(user: str):
+    if user not in pivot_table.index:
+        raise ValueError(f"User {user} not found in the dataset")
+    # Get user ratings
     user_ratings = pivot_table.loc[user]
+    # Compute similar scores and recommendations
     similar_scores = item_similarity_df.dot(user_ratings).div(item_similarity_df.sum(axis=1))
     recommendations = similar_scores.sort_values(ascending=False).head(5)
     return recommendations.to_dict()
@@ -191,14 +202,10 @@ def recommend_items(df:pd.DataFrame,user:str):
 @app.get('/recommend_items/{user}')
 async def get_recommend_items(user: str):
     try:
-        df = pd.read_parquet('API/df_Modelo')
-        result = recommend_items(df, user)  # Corrected variable name
+        result = recommend_items(user)
         return JSONResponse(content=result, media_type="application/json")
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado, revisa si la ruta del archivo es correcta ;)")
     except ValueError as ve:
         raise HTTPException(status_code=404, detail=str(ve))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al leer el archivo Parquet: {str(e)}")
-
+        raise HTTPException(status_code=500, detail=f"Error al procesar la solicitud: {str(e)}")
 
