@@ -36,15 +36,3 @@ El objetivo principal es crear un flujo de trabajo eficiente que incluya la reco
 4. **Implementación del Modelo**
    - Desarrollo de consultas generales y funciones del modelo de recomendación.
    - Implementación de la API utilizando FastAPI. Se proporcionan instrucciones para ejecutar la API localmente.
-
-## Instrucciones para Ejecutar la API Localmente
-
-- Clona el proyecto utilizando el comando: `git clone https://github.com/orestes-victor/HENRY_Proyecto_Individual_1_MLOps_Orestes_Victor.git`.
-- Prepara el entorno de trabajo en Visual Studio Code:
-  - Crea un entorno virtual en Python mediante: `python -m venv env`.
-  - Activa el entorno virtual con: `env\Scripts\activate`.
-  - Instala las dependencias del archivo `requirements.txt` mediante: `pip install -r requirements.txt`.
-- Ejecuta el archivo `main.py` desde la consola activando uvicorn con: `uvicorn main:app --reload`.
-- Haz clic en el enlace proporcionado en la consola para acceder a la API local.
-- Para acceder a la documentación de la API, añade "/docs" al final de la URL en tu navegador (ejemplo: `http://127.0.0.1:8000/docs`).
-- Dentro de cada función, haz clic en "Try it out", introduce los datos necesarios o utiliza los ejemplos predeterminados y haz clic en "Execute" para observar la respuesta en "response body".
