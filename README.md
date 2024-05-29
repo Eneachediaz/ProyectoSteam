@@ -1,8 +1,5 @@
 # Sistema de Recomendación de Videojuegos para Usuarios de Steam
 
-
-# Sistema de Recomendación de Videojuegos para Usuarios de Steam
-
 ## Video de Presentación
 
 [Haga clic aquí para ver el video de presentación del proyecto](https://drive.google.com/file/d/1Sgpo2EdmVq96KJ2jYXRHluM37POy0Yd_/view?usp=share_link)
