@@ -1,5 +1,12 @@
 # Sistema de Recomendación de Videojuegos para Usuarios de Steam
 
+
+# Sistema de Recomendación de Videojuegos para Usuarios de Steam
+
+## Video de Presentación
+
+[Haga clic aquí para ver el video de presentación del proyecto](https://drive.google.com/file/d/1Sgpo2EdmVq96KJ2jYXRHluM37POy0Yd_/view?usp=share_link)
+
 ## Descripción del Proyecto
 
 Este proyecto se enfoca en desarrollar un sistema de MLOps para recomendar videojuegos en Steam, abarcando desde la ingeniería de datos hasta la implementación de un modelo de aprendizaje automático.
@@ -92,7 +99,7 @@ La siguiente guía parte de tener listo el archivo `main.py` con el código de l
    ```bash
    deactivate
    ```
-
+   
 #### FastAPI
 
 1. Para iniciar el servidor de `uvicorn`, abrir la consola de terminal y ejecutar:
