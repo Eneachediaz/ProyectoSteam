@@ -29,10 +29,21 @@ El principal objetivo es crear un flujo de trabajo eficiente que cubra la recopi
 ### 1. Ingeniería de Datos (ETL)
 
 #### Actividades
-- **Comprensión de los Datos:** Analizar los archivos `user_reviews.json`, `users_items.json` y `steam_games.json` para entender su estructura y contenido.
-- **Procesos ETL:** Realizar la extracción, transformación y carga de datos.
-  - Eliminar columnas innecesarias.
-  - Formatear los datos para facilitar su análisis y modelado.
+
+1. **Eliminación de Columnas Irrelevantes:**
+   - Se eliminan las columnas que no son relevantes para ninguno de los endpoints.
+
+2. **Conteo de Valores Totales y Nulos:**
+   - Tras la primera limpieza, se realiza un conteo de los valores totales y nulos para identificar posibles problemas en los datos.
+
+3. **Eliminación de Valores Duplicados:**
+   - Se identifican y eliminan los valores duplicados para asegurar la integridad de los datos.
+
+4. **Revisión de Tipos de Datos:**
+   - Se revisa el tipo de dato de cada columna para asegurar que sean los adecuados para el análisis y modelado.
+
+5. **Transformación de la Columna de Precios:**
+   - Se transforma a tipo numérico la columna `price` para facilitar cálculos y análisis posteriores.
 
 ### 2. Feature Engineering
 
@@ -96,11 +107,11 @@ La siguiente guía parte de tener listo el archivo `main.py` con el código de l
    ```bash
    deactivate
    ```
-   
+
 #### FastAPI
 
-1. Para iniciar el servidor de `uvicorn`, abrir la consola de terminal y ejecutar:
-   ```bash
-   uvicorn main:app --reload
-   ```
-2. Para acceder al contenido de la API utiliza la dirección `http://127.0.0.1:8000/docs`.
+Para iniciar el servidor de uvicorn, abrir la consola de terminal y ejecutar:
+```bash
+uvicorn main:app --reload
+```
+Para acceder al contenido de la API, utiliza la dirección [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
